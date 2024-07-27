@@ -13,5 +13,9 @@
     "mysql2": "^3.10.2",
     "nuxt": "^3.12.3",
     "vue": "latest"
+  },
+  "devDependencies": {
+    "@vueuse/core": "^10.11.0",
+    "@vueuse/nuxt": "^10.11.0"
   }
 }
