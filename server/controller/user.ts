@@ -36,6 +36,25 @@ export const add = async (evt: H3Event) => {
     }
 }
 
+export const login = async (evt: H3Event) => {
+    try {
+        const body = await readBody(evt);
+        const result = await userModel.login({
+            id: body.id,
+            password: body.password
+        });
+
+        return {
+            data: result
+        }
+    } catch {
+        throw createError ({
+            statusCode: 500,
+            statusMessage: 'something went wrong'
+        });
+    }
+}
+
 export const detail = async (evt: H3Event) => {
     try {
         const result = await userModel.detail(evt.context.params?.id as string);

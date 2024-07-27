@@ -1,6 +1,11 @@
 <script setup lang="ts">
 
 import { useWebSocket } from '@vueuse/core'
+import {useAuthStore} from "@/stores/authStore";
+const authStore = useAuthStore()
+if (!authStore.userDetail) {
+  navigateTo('/Login')
+}
 
 const localUrl = 'ws://localhost:3000/api/websocket';
 const { status, data, send, open, close } = useWebSocket(localUrl)
@@ -17,9 +22,14 @@ function sendMessage() {
     return false
   }
 
-  history.value.push(`client : ${message.value}`)
+  history.value.push(`${authStore.userDetail?.name}: ${message.value}`)
   send(message.value);
-  message.value = '';
+
+  clearMessage();
+}
+
+function clearMessage() {
+  message.value = ''
 }
 
 </script>
@@ -27,17 +37,27 @@ function sendMessage() {
 <template>
   <div>
     <h1>WebSocket - let's go</h1>
-    <form @submit.prevent="sendMessage">
-      <input v-model="message"/>
-      <button type="submit">Send</button>
-    </form>
     <div>
       <p v-for="entry in history">{{ entry }}</p>
     </div>
+      <v-form @submit.prevent="sendMessage">
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                  v-model="message"
+                  append-icon="mdi-send"
+                  clear-icon="mdi-close-circle"
+                  label="Message"
+                  type="text"
+                  variant="filled"
+                  clearable
+                  @click:append="sendMessage"
+                  @click:clear="clearMessage"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-form>
   </div>
 </template>
-
-
-<style scoped>
-
-</style>

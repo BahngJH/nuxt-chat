@@ -41,9 +41,8 @@ export const detail = async (id: string) => {
 export const login = async (data: Pick<User, 'id' | 'password'>) => {
     const result = (await sql({
         query: `select 
-                    id, 
-                    password, 
-                    name 
+                    id,
+                    name
                 from user 
                 where id = ? and password = ?`,
         values: [data.id, data.password]
